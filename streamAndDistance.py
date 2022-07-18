@@ -62,29 +62,26 @@ try:
            cv2.destroyAllWindows()
  
  
-   #### Line 72 is where its giving me an issue for saving the image
  
        if key==115: # Press 's' to save
-           cv2.waitKey(0)  # takes photo
-           image_path = '/home/maryum'
-           images = cv2.imread(image_path)
-           filename = 'savedCamera.jpg'
-           cv2.imwrite(images, filename)
-           print('image saved sucessfully')
+           img = cv2.waitKey(0)
+           print('picture was taken')
+          
  
        if key==114: # Press 'r' for distance between two points
            xOne = input("Enter the first x-coordinate: ")
            yOne = input("Enter the first y-coordinate: ")
-           zOne = 0;
+           zOne = 0
  
            xTwo = input("Enter the second x-coordinate: ")
            yTwo = input("Enter the second y-coordinate: ")
-           zTwo = 0;
+           zTwo = 0
  
            distTwoPoints = round(math.sqrt(((int(xTwo) - int(xOne)) ** 2) + ((int(yTwo) - int(yOne)) ** 2) + ((int(zTwo) - int(zOne)) ** 2)))
            # Converts from pixels to meters
            distTwoPoints = distTwoPoints * 0.0002645833       
            print("The distance between the two coordinates is: ", distTwoPoints)
+ 
  
        if key==111: # Press 'o' for distance from middle pixel
            x, y = 320, 240  # this had to be half of the resolution 640x480, this takes the distance from the center of the window
@@ -115,43 +112,35 @@ try:
            plt.colorbar()
            plt.show()
  
-   ### Line 142 is returning the error where the image path is incorrect
  
        if key==108: # Press 'l' for clicking points in image window
-           img = cv2.waitKey(0)
-           print('picture was taken')
- 
-           def click_event(self, event, x, y, flags, parameters):
+          
+           def click_event(event, x, y, x2, y2):
                if event == cv2.EVENT_LBUTTONDOWN:
                    print(x, ' ', y)
+                   print(x2, ' ', y2)
+                   point1 = (x,y)
+                   point2 = (x2,y2)
                    font = cv2.FONT_HERSHEY_SIMPLEX
+                   #distance = round(math.sqrt((str(x2) - str(x)) ** 2) + ((str(y2) - str(y)) ** 2))
+                   #distance *= 0.0002645833 # used to convert to meters
+ 
                    cv2.putText(img, str(x) + ',' + str(y), (x,y), font, 1, (255, 0, 0), 2)
+                   cv2.putText(img, str(x2) + ',' + str(y2), (x2,y2), font, 1, (255, 0, 0), 2)
+                   cv2.line(img, point1, point2, (0,255,0), thickness=3, lineType=4)
+ 
+                  # cv2.putText(img + 'Distance is ' + str(distance), font, 1, (255, 0, 0), 2)
                    cv2.imshow('window', img)
  
-               if event == cv2.EVENT_RBUTTONDOWN:
-                   print(x, ' ', y)
-                   font = cv2.FONT_HERSHEY_SIMPLEX
-                   b = img[y, x, 0]
-                   g = img[y, x, 1]
-                   r = img[y, x, 2]
-                   cv2.putText(img, str(b) + ',' + str(g) + ',' + str(r) + (x,y), font, 1, (255,255,0), 2)
-                   cv2.imshow('window', img)
  
            if __name__ == "__main__":
-               img = cv2.imread('img',1)
+               img = cv2.imread('imageTwo.png', 1)
                cv2.imshow('window', img)
                cv2.setMouseCallback('window', click_event)
                cv2.waitKey(0)
                cv2.destroyAllWindows()
- 
                 
 finally:
  
    # Stop streaming
    pipeline.stop()
- 
- 
- 
- 
- 
- 
