@@ -115,22 +115,26 @@ try:
  
        if key==108: # Press 'l' for clicking points in image window
           
-           def click_event(event, x, y, x2, y2):
+           def click_event(event, x11, y11, flags, param):
                if event == cv2.EVENT_LBUTTONDOWN:
-                   print(x, ' ', y)
-                   print(x2, ' ', y2)
-                   point1 = (x,y)
-                   point2 = (x2,y2)
-                   font = cv2.FONT_HERSHEY_SIMPLEX
-                   #distance = round(math.sqrt((str(x2) - str(x)) ** 2) + ((str(y2) - str(y)) ** 2))
-                   #distance *= 0.0002645833 # used to convert to meters
- 
-                   cv2.putText(img, str(x) + ',' + str(y), (x,y), font, 1, (255, 0, 0), 2)
-                   cv2.putText(img, str(x2) + ',' + str(y2), (x2,y2), font, 1, (255, 0, 0), 2)
-                   cv2.line(img, point1, point2, (0,255,0), thickness=3, lineType=4)
- 
-                  # cv2.putText(img + 'Distance is ' + str(distance), font, 1, (255, 0, 0), 2)
-                   cv2.imshow('window', img)
+                   point1 = (x11,y11)
+                   print(point1)
+          
+                   if event == cv2.EVENT_LBUTTONDOWN:
+                           x12, y12 = event.x12, event.y12
+                           point2 = (x12,y12)
+                           print(point2)
+               
+                           font = cv2.FONT_HERSHEY_SIMPLEX
+                           #distance = round(math.sqrt((str(x2) - str(x)) ** 2) + ((str(y2) - str(y)) ** 2))
+                           #distance *= 0.0002645833 # used to convert to meters
+
+                           cv2.putText(img, str(x11) + ',' + str(y11), (x11,y11), font, 1, (255, 0, 0), 2)
+                           cv2.putText(img, str(x12) + ',' + str(y12), (x12,y12), font, 1, (255, 0, 0), 2)
+                           cv2.line(img, point1, point2, (0,255,0), thickness=3, lineType=4)
+
+                           #cv2.putText(img + 'Distance is ' + str(distance), font, 1, (255, 0, 0), 2)
+                           cv2.imshow('window', img)
  
  
            if __name__ == "__main__":
