@@ -121,7 +121,7 @@ try:
                    print(point1)
           
                    if event == cv2.EVENT_LBUTTONDOWN:
-                           x12, y12 = event.x12, event.y12
+                           x12, y12 = x11, y11
                            point2 = (x12,y12)
                            print(point2)
                
