@@ -1,4 +1,3 @@
-from tkinter import Y
 import pyrealsense2 as rs
 import numpy as np
 import cv2
