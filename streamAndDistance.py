@@ -25,6 +25,7 @@ align = rs.align(align_to)
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
  
+ 
 try:
    while True:
  
@@ -53,17 +54,19 @@ try:
        else:
            images = np.hstack((color_image, depth_colormap))
  
-       # Show images
+        # Show images
        cv2.namedWindow('Camera View', cv2.WINDOW_AUTOSIZE)
        cv2.imshow('Camera View', images)
        key = cv2.waitKey(1)
        if key & 0xFF == ord('q') or key == 27:
            cv2.destroyAllWindows()
  
+ 
        if key==115: # Press 's' to save
            img = cv2.waitKey(0)
            print('picture was taken')
           
+ 
        if key==114: # Press 'r' for distance between two points
            xOne = input("Enter the first x-coordinate: ")
            yOne = input("Enter the first y-coordinate: ")
@@ -109,7 +112,8 @@ try:
  
  
        if key==108: # Press 'l' for clicking points in image window
-   
+ 
+          
            class DrawLineWidget(object):
                def __init__(self):
                    self.image = cv2.imread('imageTwo.png')
@@ -118,26 +122,34 @@ try:
                    cv2.setMouseCallback('window', self.extract_coordinates)
  
                    self.image_coordinates = []
+                   self.image_xcoord = []
+                   self.image_ycoord = []
               
                def extract_coordinates(self, event, x, y, flags, paramaters):
                    font = cv2.FONT_HERSHEY_SIMPLEX
                    if event == cv2.EVENT_LBUTTONDOWN:
-                       self.image_coordinates = [(x, y)]
+                       self.image_xcoord = [x]
+                       self.image_ycoord = [y]
                      
                    elif event == cv2.EVENT_LBUTTONUP:
-                       self.image_coordinates.append((x,y))
-                       print('Start: {}, End: {}'.format(self.image_coordinates[0], self.image_coordinates[1]))
-                       cv2.line(self.image, self.image_coordinates[0], self.image_coordinates[1], (0,255,0), thickness=3, lineType=4)
+                       self.image_xcoord.append(x)
+                       self.image_ycoord.append(y)
  
-                     #  distance = round(math.sqrt(str(self.image_coordinates[1] - self.image_coordinates[0]) ** 2))
-                     #  distance = distance * 0.0002645833
+                       print('START:({}, {}) END:({}, {})'.format(self.image_xcoord[0], self.image_ycoord[0], self.image_xcoord[1], self.image_ycoord[1]))
  
-                     # cv2.putText(self.original_image + 'Distance is ' + str(distance), font, 1, (255,0,0), 2)
+                       cv2.line(self.image, ((self.image_xcoord[0]), self.image_ycoord[0]), (self.image_xcoord[1], self.image_ycoord[1]), (0,255,0), thickness=3, lineType=4)
+ 
+                       distance = round(math.sqrt((self.image_xcoord[1]-self.image_xcoord[0] ** 2) + (self.image_ycoord[1]-self.image_ycoord[0])), 3)
+                       distance = distance * 0.0002645833      # convert to pixels
+                       print('Distance is ', str(distance))
+ 
+                      # cv2.putText(self.original_image + 'Distance is ' + str(distance), font, 1, (255,0,0), 2)
                       
                        cv2.imshow('window', self.image)
  
                def show_image(self):
                    return self.image
+ 
  
            if __name__ == "__main__":
                    draw_line_widget = DrawLineWidget()
