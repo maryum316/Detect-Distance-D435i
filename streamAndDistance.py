@@ -1,3 +1,4 @@
+from tkinter import Y
 import pyrealsense2 as rs
 import numpy as np
 import cv2
@@ -24,7 +25,6 @@ align_to = rs.stream.depth
 align = rs.align(align_to)
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
- 
  
 try:
    while True:
@@ -54,34 +54,30 @@ try:
        else:
            images = np.hstack((color_image, depth_colormap))
  
-        # Show images
+       # Show images
        cv2.namedWindow('Camera View', cv2.WINDOW_AUTOSIZE)
        cv2.imshow('Camera View', images)
        key = cv2.waitKey(1)
        if key & 0xFF == ord('q') or key == 27:
            cv2.destroyAllWindows()
  
- 
- 
        if key==115: # Press 's' to save
            img = cv2.waitKey(0)
            print('picture was taken')
           
- 
        if key==114: # Press 'r' for distance between two points
            xOne = input("Enter the first x-coordinate: ")
            yOne = input("Enter the first y-coordinate: ")
-           zOne = 0
+           zOne = 0;
  
            xTwo = input("Enter the second x-coordinate: ")
            yTwo = input("Enter the second y-coordinate: ")
-           zTwo = 0
+           zTwo = 0;
  
-           distTwoPoints = round(math.sqrt(((int(xTwo) - int(xOne)) ** 2) + ((int(yTwo) - int(yOne)) ** 2) + ((int(zTwo) - int(zOne)) ** 2)))
+           distTwoPoints = round(math.sqrt(((int(xTwo) - int(xOne)) ** 2) + ((int(yTwo) - int(yOne)) ** 2) + ((int(zTwo) - int(zOne)) ** 2)), 3)
            # Converts from pixels to meters
-           distTwoPoints = distTwoPoints * 0.0002645833       
-           print("The distance between the two coordinates is: ", distTwoPoints)
- 
+           distTwoPoints = round(distTwoPoints * 0.0002645833, 3)       
+           print("The distance between the two coordinates is: ", distTwoPoints, "meters")
  
        if key==111: # Press 'o' for distance from middle pixel
            x, y = 320, 240  # this had to be half of the resolution 640x480, this takes the distance from the center of the window
@@ -114,35 +110,45 @@ try:
  
  
        if key==108: # Press 'l' for clicking points in image window
-          
-           def click_event(event, x11, y11, flags, param):
-               if event == cv2.EVENT_LBUTTONDOWN:
-                   point1 = (x11,y11)
-                   print(point1)
-          
-                   if event == cv2.EVENT_LBUTTONDOWN:
-                           x12, y12 = x11, y11
-                           point2 = (x12,y12)
-                           print(point2)
-               
-                           font = cv2.FONT_HERSHEY_SIMPLEX
-                           #distance = round(math.sqrt((str(x2) - str(x)) ** 2) + ((str(y2) - str(y)) ** 2))
-                           #distance *= 0.0002645833 # used to convert to meters
-
-                           cv2.putText(img, str(x11) + ',' + str(y11), (x11,y11), font, 1, (255, 0, 0), 2)
-                           cv2.putText(img, str(x12) + ',' + str(y12), (x12,y12), font, 1, (255, 0, 0), 2)
-                           cv2.line(img, point1, point2, (0,255,0), thickness=3, lineType=4)
-
-                           #cv2.putText(img + 'Distance is ' + str(distance), font, 1, (255, 0, 0), 2)
-                           cv2.imshow('window', img)
+   
+           class DrawLineWidget(object):
+               def __init__(self):
+                   self.image = cv2.imread('imageTwo.png')
  
+                   cv2.namedWindow('window')
+                   cv2.setMouseCallback('window', self.extract_coordinates)
+ 
+                   self.image_coordinates = []
+              
+               def extract_coordinates(self, event, x, y, flags, paramaters):
+                   font = cv2.FONT_HERSHEY_SIMPLEX
+                   if event == cv2.EVENT_LBUTTONDOWN:
+                       self.image_coordinates = [(x, y)]
+                     
+                   elif event == cv2.EVENT_LBUTTONUP:
+                       self.image_coordinates.append((x,y))
+                       print('Start: {}, End: {}'.format(self.image_coordinates[0], self.image_coordinates[1]))
+                       cv2.line(self.image, self.image_coordinates[0], self.image_coordinates[1], (0,255,0), thickness=3, lineType=4)
+ 
+                     #  distance = round(math.sqrt(str(self.image_coordinates[1] - self.image_coordinates[0]) ** 2))
+                     #  distance = distance * 0.0002645833
+ 
+                     # cv2.putText(self.original_image + 'Distance is ' + str(distance), font, 1, (255,0,0), 2)
+                      
+                       cv2.imshow('window', self.image)
+ 
+               def show_image(self):
+                   return self.image
  
            if __name__ == "__main__":
-               img = cv2.imread('imageTwo.png', 1)
-               cv2.imshow('window', img)
-               cv2.setMouseCallback('window', click_event)
-               cv2.waitKey(0)
-               cv2.destroyAllWindows()
+                   draw_line_widget = DrawLineWidget()
+                   while True:
+                       cv2.imshow('window', draw_line_widget.show_image())
+                       key = cv2.waitKey(1)
+ 
+                       if key == ord('q'):
+                           cv2.destroyAllWindows()
+                           exit(1)
                 
 finally:
  
