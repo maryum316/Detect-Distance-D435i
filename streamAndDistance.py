@@ -139,7 +139,7 @@ try:
  
                        cv2.line(self.image, ((self.image_xcoord[0]), self.image_ycoord[0]), (self.image_xcoord[1], self.image_ycoord[1]), (0,255,0), thickness=3, lineType=4)
  
-                       distance = round(math.sqrt((self.image_xcoord[1]-self.image_xcoord[0] ** 2) + (self.image_ycoord[1]-self.image_ycoord[0])), 3)
+                       distance = round(math.sqrt(((self.image_xcoord[1]) - (self.image_xcoord[0]) ** 2) + ((self.image_ycoord[1]) - (self.image_ycoord[0]) ** 2)), 3)
                        distance = distance * 0.0002645833      # convert to pixels
                        print('Distance is ', str(distance))
  
