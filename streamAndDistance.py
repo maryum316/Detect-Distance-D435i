@@ -24,8 +24,7 @@ align_to = rs.stream.depth
 align = rs.align(align_to)
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
- 
- 
+  
 try:
    while True:
  
@@ -61,12 +60,10 @@ try:
        if key & 0xFF == ord('q') or key == 27:
            cv2.destroyAllWindows()
  
- 
        if key==115: # Press 's' to save
            img = cv2.waitKey(0)
            print('picture was taken')
           
- 
        if key==114: # Press 'r' for distance between two points
            xOne = input("Enter the first x-coordinate: ")
            yOne = input("Enter the first y-coordinate: ")
@@ -110,12 +107,11 @@ try:
            plt.colorbar()
            plt.show()
  
- 
        if key==108: # Press 'l' for clicking points in image window
      
            class DrawLineWidget(object):
                def __init__(self):
-                   self.image = cv2.imread('imageTwo.png')
+                   self.image = cv2.imread('imageFive.png')
  
                    cv2.namedWindow('window')
                    cv2.setMouseCallback('window', self.extract_coordinates)
@@ -137,18 +133,27 @@ try:
                        print('START:({}, {}) END:({}, {})'.format(self.image_xcoord[0], self.image_ycoord[0], self.image_xcoord[1], self.image_ycoord[1]))
  
                        cv2.line(self.image, ((self.image_xcoord[0]), self.image_ycoord[0]), (self.image_xcoord[1], self.image_ycoord[1]), (0,255,0), thickness=3, lineType=4)
- 
-                       distance = round(math.sqrt((((self.image_xcoord[1]) - (self.image_xcoord[0])) ** 2) + (((self.image_ycoord[1]) - (self.image_ycoord[0])) ** 2)), 3)
-                       distance = round(distance * 0.0002645833, 3)      # convert to meters
-                       print('Distance is', str(distance), 'meters')
- 
-                       cv2.putText(self.image, str(distance) + ' meters', fontFace=font, org=(self.image_xcoord[0], self.image_ycoord[0]), fontScale=0.65, color=(255,0,0), thickness=2)
+                              
+                       #meterDistance = round(math.sqrt((((self.image_xcoord[1]) - (self.image_xcoord[0])) ** 2) + (((self.image_ycoord[1]) - (self.image_ycoord[0])) ** 2)), 3)
+                      # meterDistance = round(meterDistance * 0.0002645833, 3)      # convert to meters
+                       #print('Distance is', str(meterDistance), 'meters')
                       
-                       cv2.imshow('window', self.image)
+                       #cv2.putText(self.image, str(meterDistance) + 'meters', fontFace=font, org=(self.image_xcoord[0], self.image_ycoord[0]), fontScale=0.65, color=(255,0,0), thickness=2)
+                       #cv2.imshow('window', self.image)
+ 
+                       depth1 = round(depth_frame.get_distance(self.image_xcoord[0], self.image_ycoord[0]), 3)
+                       depth2 = round(depth_frame.get_distance(self.image_xcoord[1], self.image_ycoord[1]), 3)
+                       depth3 = depth2 - depth1
+                       color_intrin = color_frame.profile.as_video_stream_profile().intrinsics
+                       dx, dy, dz = rs.rs2_deproject_pixel_to_point(color_intrin, [self.image_xcoord[0], self.image_ycoord[0]], depth3)
+                       distance = round(math.sqrt((((dx)**2)) + ((dy) **2) + ((dz) **2)), 3)
+                       print(distance)
+                       cv2.putText(self.image, str(distance) + 'meters', fontFace=font, org=(self.image_xcoord[0], self.image_ycoord[0]), fontScale=0.65, color=(255,0,0), thickness=2)
+ 
+                      # return distances
  
                def show_image(self):
                    return self.image
- 
  
            if __name__ == "__main__":
                    draw_line_widget = DrawLineWidget()
