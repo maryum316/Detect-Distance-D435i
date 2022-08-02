@@ -64,20 +64,6 @@ try:
            img = cv2.waitKey(0)
            print('picture was taken')
           
-       if key==114: # Press 'r' for distance between two points
-           xOne = input("Enter the first x-coordinate: ")
-           yOne = input("Enter the first y-coordinate: ")
-           zOne = 0;
- 
-           xTwo = input("Enter the second x-coordinate: ")
-           yTwo = input("Enter the second y-coordinate: ")
-           zTwo = 0;
- 
-           distTwoPoints = round(math.sqrt(((int(xTwo) - int(xOne)) ** 2) + ((int(yTwo) - int(yOne)) ** 2) + ((int(zTwo) - int(zOne)) ** 2)), 3)
-           # Converts from pixels to meters
-           distTwoPoints = round(distTwoPoints * 0.0002645833, 3)       
-           print("The distance between the two coordinates is: ", distTwoPoints, "meters")
- 
        if key==111: # Press 'o' for distance from middle pixel
            x, y = 320, 240  # this had to be half of the resolution 640x480, this takes the distance from the center of the window
  
