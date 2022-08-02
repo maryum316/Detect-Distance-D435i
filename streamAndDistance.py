@@ -61,12 +61,10 @@ try:
        if key & 0xFF == ord('q') or key == 27:
            cv2.destroyAllWindows()
  
- 
        if key==115: # Press 's' to save
            img = cv2.waitKey(0)
            print('picture was taken')
           
- 
        if key==114: # Press 'r' for distance between two points
            xOne = input("Enter the first x-coordinate: ")
            yOne = input("Enter the first y-coordinate: ")
@@ -110,7 +108,6 @@ try:
            plt.colorbar()
            plt.show()
  
- 
        if key==108: # Press 'l' for clicking points in image window
      
            class DrawLineWidget(object):
@@ -141,12 +138,6 @@ try:
  
                        depth1 = depth_frame.get_distance(self.image_xcoord[0], self.image_ycoord[0])
                        depth2 = depth_frame.get_distance(self.image_xcoord[1], self.image_ycoord[1])
- 
-                      # p1 = rs.rs2_deproject_pixel_to_point(color_intrin, [self.image_xcoord[0], self.image_ycoord[0]], depth1)
-                      # p2 = rs.rs2_deproject_pixel_to_point(color_intrin, [self.image_xcoord[1], self.image_ycoord[1]], depth2)
- 
-                      # distance = round(np.sqrt(np.power((p1[0] - p2[0]), 2) + np.power((p1[1]-p2[1]), 2) + np.power((p1[2]-p2[2]), 2)), 3)
-                      # print(distance)
  
                        distance = np.sqrt(((self.image_xcoord[1] - self.image_xcoord[0]) ** 2) + ((self.image_ycoord[1] - self.image_ycoord[0]) ** 2) + ((depth2 - depth1) ** 2))
                        distance = round(distance * 0.0002645833, 3)
