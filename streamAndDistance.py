@@ -25,6 +25,7 @@ align = rs.align(align_to)
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
  
+ 
 try:
    while True:
  
@@ -60,10 +61,26 @@ try:
        if key & 0xFF == ord('q') or key == 27:
            cv2.destroyAllWindows()
  
+ 
        if key==115: # Press 's' to save
            img = cv2.waitKey(0)
            print('picture was taken')
           
+ 
+       if key==114: # Press 'r' for distance between two points
+           xOne = input("Enter the first x-coordinate: ")
+           yOne = input("Enter the first y-coordinate: ")
+           zOne = 0;
+ 
+           xTwo = input("Enter the second x-coordinate: ")
+           yTwo = input("Enter the second y-coordinate: ")
+           zTwo = 0;
+ 
+           distTwoPoints = round(math.sqrt(((int(xTwo) - int(xOne)) ** 2) + ((int(yTwo) - int(yOne)) ** 2) + ((int(zTwo) - int(zOne)) ** 2)), 3)
+           # Converts from pixels to meters
+           distTwoPoints = round(distTwoPoints * 0.0002645833, 3)       
+           print("The distance between the two coordinates is: ", distTwoPoints, "meters")
+ 
        if key==111: # Press 'o' for distance from middle pixel
            x, y = 320, 240  # this had to be half of the resolution 640x480, this takes the distance from the center of the window
  
@@ -92,6 +109,7 @@ try:
            plt.ylabel("480")
            plt.colorbar()
            plt.show()
+ 
  
        if key==108: # Press 'l' for clicking points in image window
      
@@ -124,11 +142,14 @@ try:
                        depth1 = depth_frame.get_distance(self.image_xcoord[0], self.image_ycoord[0])
                        depth2 = depth_frame.get_distance(self.image_xcoord[1], self.image_ycoord[1])
  
-                       p1 = rs.rs2_deproject_pixel_to_point(color_intrin, [self.image_xcoord[0], self.image_ycoord[0]], depth1)
-                       p2 = rs.rs2_deproject_pixel_to_point(color_intrin, [self.image_xcoord[1], self.image_ycoord[1]], depth2)
+                      # p1 = rs.rs2_deproject_pixel_to_point(color_intrin, [self.image_xcoord[0], self.image_ycoord[0]], depth1)
+                      # p2 = rs.rs2_deproject_pixel_to_point(color_intrin, [self.image_xcoord[1], self.image_ycoord[1]], depth2)
  
-                       distance = np.sqrt(np.power((p1[0] - p2[0]), 2) + np.power((p1[1]-p2[1]), 2) + np.power((p1[2]-p2[2]), 2))
-                       print(distance)
+                      # distance = round(np.sqrt(np.power((p1[0] - p2[0]), 2) + np.power((p1[1]-p2[1]), 2) + np.power((p1[2]-p2[2]), 2)), 3)
+                      # print(distance)
+ 
+                       distance = np.sqrt(((self.image_xcoord[1] - self.image_xcoord[0]) ** 2) + ((self.image_ycoord[1] - self.image_ycoord[0]) ** 2) + ((depth2 - depth1) ** 2))
+                       distance = round(distance * 0.0002645833, 3)
                       
                        cv2.putText(self.image, str(distance) + 'meters', fontFace=font, org=(self.image_xcoord[0], self.image_ycoord[0]), fontScale=0.65, color=(255,0,0), thickness=2)
  
