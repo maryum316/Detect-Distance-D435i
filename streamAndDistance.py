@@ -19,7 +19,8 @@ config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
  
 # Start streaming
 profile = pipeline.start(config)
- 
+
+# Align depth frames 
 align_to = rs.stream.depth
 align = rs.align(align_to)
 depth_sensor = profile.get_device().first_depth_sensor()
@@ -60,7 +61,8 @@ try:
        key = cv2.waitKey(1)
        if key & 0xFF == ord('q') or key == 27:
            cv2.destroyAllWindows()
- 
+        
+       # Freezes the image, press button in left center window to save as .png 
        if key==115: # Press 's' to save
            img = cv2.waitKey(0)
            print('picture was taken')
@@ -112,7 +114,7 @@ try:
      
            class DrawLineWidget(object):
                def __init__(self):
-                   self.image = cv2.imread('phone3.png')
+                   self.image = cv2.imread('phone3.png') # Replace this with any .png image the camera took prior 
  
                    cv2.namedWindow('window')
                    cv2.setMouseCallback('window', self.extract_coordinates)
