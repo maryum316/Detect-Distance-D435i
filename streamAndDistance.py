@@ -92,23 +92,6 @@ try:
            print("Distance from camera to pixel (meters):", distance)
            print("Z-depth from camera surface to pixel surface (meters):", depth)
  
-       if key==109: # Press 'm' for meshgrid
-           x = np.linspace(0, 639, 640)
-           y = np.linspace(0, 479, 480)
-           xx, yy = np.meshgrid(x, y)
-           zz = np.sqrt(xx**2 + yy**2) # use distance formula?
-           xs, ys = np.meshgrid(x, y)
-           zs = np.sqrt(xs**2 + ys**2)
-           xs.shape, ys.shape, zs.shape
-           np.array_equal(zz, zs)
- 
-           h = plt.contourf(x, y, zs)
-           plt.axis('scaled')
-           plt.title("Distance Values")
-           plt.xlabel("640")
-           plt.ylabel("480")
-           plt.colorbar()
-           plt.show()
  
        if key==108: # Press 'l' for clicking points in image window
      
