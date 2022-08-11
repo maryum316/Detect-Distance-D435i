@@ -1,4 +1,6 @@
-import shutil, time, pyrealsense2 as rs2
+import shutil
+import time 
+import pyrealsense2 as rs2
 
 class Pipeline:
     
@@ -12,7 +14,7 @@ class Pipeline:
         self.config   = config = rs2.config()
         self.pipeline = rs2.pipeline(context)
         config.enable_device(serial_number)
-        config.enable_record_to_file('tmp.bag')
+        config.enable_record_to_file('tmp.bag') # can change this name 
         
     def start(self): self.pipeline.start(self.config)
         
