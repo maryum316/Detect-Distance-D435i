@@ -26,7 +26,6 @@ align = rs.align(align_to)
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
  
- 
 try:
    while True:
  
